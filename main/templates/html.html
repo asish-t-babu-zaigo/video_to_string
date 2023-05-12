@@ -1,0 +1,58 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post" action="{% url 'upload_video' %}">{% csrf_token %}<input type="file" name="video_file"><button type="submit">Upload video</button></form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Video</title>
+</head>
+<body>
+  <form method="post" action="{% url 'upload_video' %}" enctype="multipart/form-data" name="myForm">
+    {% csrf_token %}
+    <input type="file" name="video_file">
+    <button id="submit-btn" type="submit">Upload video</button>
+  </form>
+
+  <script>
+    const form = document.querySelector('form');
+    const submitBtn = document.querySelector('#submit-btn');
+
+    submitBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      const formData =new FormData()
+      var name = document.myForm.video_file.value;
+      formData.append("file",name)
+      console.log(name,'formdata');
+      const url = form.action;
+
+      fetch(url, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response here
+        console.log(data);
+      })
+      .catch(error => {
+        // Handle any errors here
+        console.error(error);
+      });
+    });
+  </script>
+</body>
+</html>

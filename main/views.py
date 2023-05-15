@@ -29,13 +29,16 @@ def video_to_text(request):
             a=Video.objects.count()+1
             b="audio"+str(a)+".wav"
             audio.write_audiofile("./static/audio"+str(a)+".wav")
-            recognizer = sr.Recognizer()
-            audio = sr.AudioFile("./static/"+b)
-            with audio as source:
-                audio_data = recognizer.record(source)
-                text = recognizer.recognize_google(audio_data)
-            print(text)
-            return Response({'text':text})
+            try:
+                recognizer = sr.Recognizer()
+                audio = sr.AudioFile("./static/"+b)
+                with audio as source:
+                    audio_data = recognizer.record(source)
+                    text = recognizer.recognize_google(audio_data)
+                print(text)
+                return Response({'text':text})
+            except:
+                return Response({"error" : "unsupported language"})
         return Response(serializer.errors)
 
 @api_view(['GET'])
